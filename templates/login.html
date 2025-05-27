@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Management System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1A2526, #2C3E50);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .main-heading {
+      font-size: 2rem;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .login-box {
+      background: #2C3E50;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .login-box h2 {
+      color: #ffffff;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    .login-box form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .login-box label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #A0A0A0;
+      text-align: left;
+      width: 100%;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #3A4B5C;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #3A4B5C;
+      color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    .login-box input:focus {
+      border-color: #28A745;
+      outline: none;
+    }
+
+    .login-box input::placeholder {
+      color: #A0A0A0;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28A745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-box button:hover {
+      background-color: #218838;
+    }
+
+    .footer {
+      color: #A0A0A0;
+      font-size: 0.8rem;
+      padding: 10px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 0.7s;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">AI-Powered Attendance Management Software</div>
+    <div class="login-box">
+      <h2>Login</h2>
+      <form method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; 2025 TARS Technologies. All rights reserved.
+  </div>
+</body>
+</html>

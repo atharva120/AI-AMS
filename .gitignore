@@ -1,0 +1,9 @@
+# Ignore sensitive and dataset JSON files
+/tars_check.json
+/attendance-sheets-credentials.json
+/dataset.json
+
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local

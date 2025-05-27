@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Attendance History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1A2526;
+            color: #fff;
+            padding: 20px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1A2526;
+            padding: 10px 20px;
+            border-bottom: 1px solid #2C3E50;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 20px;
+            position: relative;
+        }
+
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #28A745;
+        }
+
+        .navbar .company-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar .company-info i {
+            color: #fff;
+        }
+
+        /* Dropdown for Records */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #2C3E50;
+            min-width: 160px;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #3A4B5C;
+            color: #28A745;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            background-color: #E6F4EA;
+            color: #155724;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-message .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #155724;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            margin: 20px 0;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .dashboard-header p {
+            color: #A0A0A0;
+            font-size: 0.9rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: #2C3E50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        /* Form Styles */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        select, input[type="month"] {
+            padding: 8px;
+            margin: 5px;
+            background-color: #3A4B5C;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        select option[disabled] {
+            color: #A0A0A0;
+        }
+
+        input[type="date"] {
+            padding: 8px;
+            margin: 5px;
+            background-color: #3A4B5C;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="month"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+        }
+
+        button {
+            background-color: #6C757D;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5A6268;
+        }
+
+        .back-btn {
+            background-color: #28A745;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Leave Filter Styles */
+        .leave-filter {
+            background-color: #34495E;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .leave-filter h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .leave-filter p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        /* Monthly Stats Styles */
+        .monthly-stats {
+            background-color: #34495E;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .monthly-stats h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .monthly-stats p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #3A4B5C;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3A4B5C;
+            color: #fff;
+        }
+
+        td {
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #34495E;
+        }
+
+        tr:hover {
+            background-color: #3A4B5C;
+        }
+
+        /* No Records Message */
+        p {
+            text-align: center;
+            color: #A0A0A0;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        h3 {
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo">AI-Powered Attendance Management Software</div>
+        <div class="nav-links">
+            <a href="/admin_panel">Dashboard</a>
+            <a href="#">Attendance</a>
+            <div class="dropdown">
+                <a href="#">Records</a>
+                <div class="dropdown-content">
+                    <a href="/history" class="history-btn">View History</a>
+                    <a href="/download_attendance" class="download-btn">Download Attendance</a>
+                </div>
+            </div>
+        </div>
+        <div class="company-info">
+            <i class="fas fa-building"></i>
+            <span>TARS TECHNOLOGIES</span>
+            <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+
+    <!-- Welcome Message -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="welcome-message">
+                    <span>{{ message }}</span>
+                    <button class="close-btn">×</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if request.args.get('message') %}
+        <div class="welcome-message">
+            <span>{{ request.args.get('message') }}</span>
+            <button class="close-btn">×</button>
+        </div>
+    {% endif %}
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1>Attendance History</h1>
+        <p>View historical attendance records for TARS TECHNOLOGIES</p>
+    </div>
+
+    <div class="card">
+        <div class="form-container">
+            <form method="POST" id="history-form">
+                <label for="name">Select User:</label>
+                <select name="name" id="name">
+                    <option value="">-- Select a User --</option>
+                    {% if registered_users %}
+                        {% for user in registered_users %}
+                            <option value="{{ user }}" {% if user == selected_user %}selected{% endif %}>{{ user }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="" disabled>No users available</option>
+                    {% endif %}
+                </select>
+                <label for="month">Select Month:</label>
+                <input type="month" name="month" id="month" value="{{ selected_month if selected_month else '' }}">
+                <label for="date">Select Date:</label>
+                <input type="date" name="date" id="date" value="{{ selected_date if selected_date else '' }}">
+                <button type="submit">Fetch Records</button>
+            </form>
+        </div>
+
+        <div class="leave-filter" id="leave-filter">
+            <h4 id="leave-title"></h4>
+            <p id="leaves-taken-total"></p>
+            <p id="leaves-pending"></p>
+        </div>
+
+        <div class="monthly-stats" id="monthly-stats">
+            <h4 id="stats-title"></h4>
+            <p id="total-days"></p>
+            <p id="present-days"></p>
+            <p id="leaves-taken"></p>
+            <p id="leaves-remaining"></p>
+            <p id="carry-forward"></p>
+        </div>
+
+        {% if selected_user and user_history %}
+            <h3>Attendance History for {{ selected_user }}</h3>
+            {% if user_history|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Hours</th>
+                            <th>Day Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        {% for record in user_history %}
+                            <tr>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.status }}</td>
+                                <td>{{ record.time }}</td>
+                                <td>{{ record.hours }}</td>
+                                <td>{{ record.day_status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No attendance records found for {{ selected_user }}.</p>
+            {% endif %}
+        {% elif selected_date %}
+            <h3>Attendance for {{ selected_date }}</h3>
+            {% if attendance_records %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Hours</th>
+                            <th>Day Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in attendance_records %}
+                            <tr>
+                                <td>{{ record.name }}</td>
+                                <td>{{ record.status }}</td>
+                                <td>{{ record.time}}</td>
+                                <td>{{ record.hours }}</td>
+                                <td>{{ record.day_status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No attendance records found for {{ selected_date }}.</p>
+            {% endif %}
+        {% endif %}
+
+        <a href="/admin_panel"><button class="back-btn">Back to Admin Panel</button></a>
+    </div>
+
+    <script>
+        // Close Welcome Message
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.style.display = 'none';
+            });
+        });
+
+        // Pass user_history to JavaScript
+        const userHistory = {{ user_history | tojson }};
+        const selectedUser = "{{ selected_user }}";
+        const selectedMonth = document.getElementById('month').value;
+        const currentDate = new Date('2025-05-27'); // Current date: May 27, 2025
+
+        // Function to get the number of days in a month
+        function getDaysInMonth(year, month) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        // Function to parse date in DD/MM/YYYY format
+        function parseDate(dateStr) {
+            const [day, month, year] = dateStr.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        // Function to get previous month in YYYY-MM format
+        function getPreviousMonth(year, month) {
+            const date = new Date(year, month - 1, 1);
+            date.setMonth(date.getMonth() - 1);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        // Function to get the month range from earliest record to current date
+        function getMonthRange(history) {
+            if (!history || history.length === 0) return [];
+            const dates = history.map(record => parseDate(record.date));
+            const earliestDate = new Date(Math.min(...dates));
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1; // 1-12
+
+            const startYear = earliestDate.getFullYear();
+            const startMonth = earliestDate.getMonth() + 1; // 1-12
+
+            const months = [];
+            let year = startYear;
+            let month = startMonth;
+
+            while (year < currentYear || (year === currentYear && month <= currentMonth)) {
+                months.push({ year, month: String(month).padStart(2, '0') });
+                month++;
+                if (month > 12) {
+                    month = 1;
+                    year++;
+                }
+            }
+
+            return months;
+        }
+
+        // Function to calculate total leaves (Taken and Pending)
+        function calculateTotalLeaves() {
+            const leaveFilterDiv = document.getElementById('leave-filter');
+            if (!selectedUser || !userHistory || userHistory.length === 0) {
+                leaveFilterDiv.style.display = 'none';
+                return;
+            }
+
+            // Count total leaves taken up to the current date
+            let totalLeavesTaken = 0;
+            userHistory.forEach(record => {
+                const recordDate = parseDate(record.date);
+                if (recordDate <= currentDate && record.status === 'Absent') {
+                    totalLeavesTaken++;
+                }
+            });
+
+            // Calculate pending leaves
+            const monthRange = getMonthRange(userHistory);
+            let carryForwardLeaves = 0;
+            let totalAvailableLeaves = 0;
+
+            monthRange.forEach(({ year, month }) => {
+                const monthStart = new Date(year, parseInt(month) - 1, 1);
+                const monthEnd = new Date(year, parseInt(month) - 1, getDaysInMonth(year, parseInt(month)));
+                if (monthEnd > currentDate) {
+                    monthEnd.setTime(currentDate.getTime());
+                }
+
+                // Filter records for this month
+                const monthRecords = userHistory.filter(record => {
+                    const recordDate = parseDate(record.date);
+                    return recordDate >= monthStart && recordDate <= monthEnd;
+                });
+
+                // Count absent days (leaves taken) in this month
+                const leavesTakenThisMonth = monthRecords.filter(record => record.status === 'Absent').length;
+
+                // Available leaves for this month
+                const allowedLeaves = 2;
+                const availableLeaves = allowedLeaves + carryForwardLeaves;
+                const leavesRemaining = Math.max(0, availableLeaves - leavesTakenThisMonth);
+
+                // Update carry-forward for the next month
+                carryForwardLeaves = leavesRemaining <= 2 ? leavesRemaining : 2;
+
+                // Store carry-forward in localStorage
+                const monthKey = `${year}-${month}`;
+                const carryForwardKey = `carryForward_${selectedUser}_${monthKey}`;
+                localStorage.setItem(carryForwardKey, carryForwardLeaves);
+
+                // Add to total available leaves (only if the month is fully processed)
+                if (monthEnd <= currentDate) {
+                    totalAvailableLeaves += availableLeaves;
+                }
+            });
+
+            // Calculate pending leaves
+            const pendingLeaves = Math.max(0, totalAvailableLeaves - totalLeavesTaken);
+
+            // Display leave stats
+            document.getElementById('leave-title').textContent = `Leave Summary for ${selectedUser} (Up to May 27, 2025)`;
+            document.getElementById('leaves-taken-total').textContent = `Taken: ${totalLeavesTaken}`;
+            document.getElementById('leaves-pending').textContent = `Pending: ${pendingLeaves}`;
+            leaveFilterDiv.style.display = 'block';
+        }
+
+        // Function to calculate and display monthly stats
+        function calculateMonthlyStats() {
+            const monthInput = document.getElementById('month').value; // e.g., "2025-05"
+            const monthlyStatsDiv = document.getElementById('monthly-stats');
+            if (!selectedUser || !monthInput || !userHistory || userHistory.length === 0) {
+                monthlyStatsDiv.style.display = 'none';
+                return;
+            }
+
+            const [year, month] = monthInput.split('-').map(Number);
+            const totalDays = getDaysInMonth(year, month);
+            const monthStart = new Date(year, month - 1, 1);
+            const monthEnd = new Date(year, month - 1, totalDays);
+
+            // Filter records for the selected month
+            let presentDays = 0;
+            let absentDays = 0;
+            const filteredHistory = userHistory.filter(record => {
+                const recordDate = parseDate(record.date);
+                return recordDate >= monthStart && recordDate <= monthEnd;
+            });
+
+            // Count present and absent days
+            filteredHistory.forEach(record => {
+                if (record.status === 'Present') {
+                    presentDays++;
+                } else if (record.status === 'Absent') {
+                    absentDays++;
+                }
+            });
+
+            // Calculate leaves
+            const allowedLeaves = 2;
+            const leavesTaken = absentDays;
+
+            // Fetch carry-forward leaves from the previous month
+            const prevMonth = getPreviousMonth(year, month); // e.g., "2025-04"
+            const carryForwardKey = `carryForward_${selectedUser}_${prevMonth}`;
+            const carryForwardLeaves = parseInt(localStorage.getItem(carryForwardKey)) || 0;
+
+            // Total available leaves
+            const totalAvailableLeaves = allowedLeaves + carryForwardLeaves;
+            const leavesRemaining = Math.max(0, totalAvailableLeaves - leavesTaken);
+            const newCarryForward = leavesRemaining <= 2 ? leavesRemaining : 2; // Cap at 2
+
+            // Store carry-forward leaves for the current month
+            const currentMonthKey = `carryForward_${selectedUser}_${monthInput}`;
+            localStorage.setItem(currentMonthKey, newCarryForward);
+
+            // Display monthly stats
+            const monthName = new Date(year, month - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+            document.getElementById('stats-title').textContent = `Monthly Stats for ${selectedUser} (${monthName})`;
+            document.getElementById('total-days').textContent = `Total Days in Month: ${totalDays}`;
+            document.getElementById('present-days').textContent = `Days Present: ${presentDays}`;
+            document.getElementById('leaves-taken').textContent = `Leaves Taken: ${leavesTaken} out of 2`;
+            document.getElementById('leaves-remaining').textContent = `Leaves Remaining: ${leavesRemaining}`;
+            document.getElementById('carry-forward').textContent = `Leaves Carried Forward to Next Month: ${newCarryForward}`;
+            monthlyStatsDiv.style.display = 'block';
+
+            // Optionally filter the table to show only the selected month's records
+            const tableBody = document.getElementById('history-table-body');
+            if (tableBody) {
+                tableBody.innerHTML = '';
+                filteredHistory.forEach(record => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${record.date}</td>
+                        <td>${record.status}</td>
+                        <td>${record.time}</td>
+                        <td>${record.hours}</td>
+                        <td>${record.day_status}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Calculate stats on page load if a user is selected
+        if (selectedUser) {
+            calculateTotalLeaves();
+            if (selectedMonth) {
+                calculateMonthlyStats();
+            }
+        }
+
+        // Recalculate stats when the month input changes (without form submission)
+        document.getElementById('month').addEventListener('change', (e) => {
+            if (selectedUser) {
+                calculateMonthlyStats();
+            }
+        });
+
+        // Recalculate stats after form submission
+        document.getElementById('history-form').addEventListener('submit', () => {
+            setTimeout(() => {
+                calculateTotalLeaves();
+                calculateMonthlyStats();
+            }, 100); // Delay to ensure DOM updates
+        });
+    </script>
+</body>
+</html>
